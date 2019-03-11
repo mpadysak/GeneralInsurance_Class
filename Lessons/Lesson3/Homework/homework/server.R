@@ -5,7 +5,7 @@ server <- function(input, output){
   tabulka <- reactive({
     read.csv("./Data/lesson2_KPI.csv")
   })
-    output$chart <- renderPlot(
+    output$graph <- renderPlot(
       tabulka %>% 
         mutate(Prof = Premium - Expenses - Losses) %>% 
         group_by(input$chosen_par) %>% 
@@ -17,4 +17,4 @@ server <- function(input, output){
 } 
 
 #snazil som sa skombinovat ten tutorial na githube s minulou ulohou, idea bola aby sa menil parameter podla ktoreho
-#sa to groupuje a ten si bral z ui ako input
+#sa to groupuje a ten si bral z ui ako input 
