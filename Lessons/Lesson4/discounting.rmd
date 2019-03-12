@@ -51,9 +51,9 @@ library(ChainLadder)
 ```
 Load data about KPIs
 ```{r}
-dt_KPI <- read.csv("./Data/lesson2_KPI.csv")
-dt_LatestView <- read.csv("./Data/lesson4_latestView.csv")
-dt_PaidCase <- read.csv("./Data/lesson4_PaidCase.csv")
+dt_KPI <- read.csv("C:\\Users\\mpady\\OneDrive\\Dokumenty\\GeneralInsurance_Class\\Data\\lesson2_KPI.csv")
+dt_LatestView <- read.csv("C:\\Users\\mpady\\OneDrive\\Dokumenty\\GeneralInsurance_Class\\Data\\lesson4_latestView.csv")
+dt_PaidCase <- read.csv("C:\\Users\\mpady\\OneDrive\\Dokumenty\\GeneralInsurance_Class\\Data\\lesson4_PaidCase.csv")
 ```
 
 #### Exercise 1
@@ -81,7 +81,7 @@ _Now try to predict what happens with the linse using the chain ladder technique
 Your solution
 ```{r}
 
-
+chainladder(GenIns)
 
 
 ```
@@ -97,30 +97,30 @@ Hint2: There are 2 types of data - paid and case. Start using Paid...
 
 _YOUR SOLUTION_
 understand the data => run some simple overviews
-
+summary(dt_PaidCase)
 create a variable => filter data and covert to triangle. then convert to cummulative to use chainladder
 
 _STEP 1: Take paid data for House business and Small claim size_
 
 ```{r}
-Paid_HH_sml <- dt_PaidCase %>% filter(...) 
+Paid_HH_sml <- dt_PaidCase %>% filter(dataset_type=="PAID" , Business == "House" , ClaimSize=="Small") 
 ```
 
 _STEP 2: Now convert the standard table into a triangle_
-Hint: %>% as.triangle(...)
+Paid_HH_sml_triangle <- Paid_HH_sml %>% as.triangle(origin="ay", dev="dy", value="SumOfamount")
+
 
 ```{r}
 
 ```
 
 _STEP 3: Now start plotting things to see more information_
-
-```{r}
-
-```
+Paid_HH_sml_triangle
+plot(Paid_HH_sml_triangle)
+plot(predict(chainladder(Paid_HH_sml_triangle)))
 
 _STEP 4: And get the aging factors and some other stat's out to see more details_
-Hint: ata(...)
+ata(GenIns)
 
 ```{r}
 
