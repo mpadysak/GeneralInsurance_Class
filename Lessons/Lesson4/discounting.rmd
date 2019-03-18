@@ -120,28 +120,96 @@ plot(Paid_HH_sml_triangle)
 plot(predict(chainladder(Paid_HH_sml_triangle)))
 
 _STEP 4: And get the aging factors and some other stat's out to see more details_
-ata(GenIns)
-
-```{r}
+ata(Paid_HH_sml_triangle)
+predict(chainladder(Paid_HH_sml_triangle))
 
 ```
 
 _Now repeat for all types of buiness and sizes of claims. Compare the findings..._
 
-```{r}
+_PAID, House, Large
+Paid_HH_big <- dt_PaidCase %>% filter(dataset_type=="PAID" , Business == "House" , ClaimSize=="Large") 
+Paid_HH_big_triangle <- Paid_HH_big %>% as.triangle(origin="ay", dev="dy", value="SumOfamount")
+Paid_HH_big_triangle
+plot(Paid_HH_big_triangle)
+plot(predict(chainladder(Paid_HH_big_triangle)))
+ata(Paid_HH_big_triangle)
+predict(chainladder(Paid_HH_big_triangle))
+#Porovnanie big a small pre "predikovany chainladder plot": zdanie ze big veci su settled skor ale nejavi sa to nejak signifikantne obrovsky .-)
+ata(Paid_HH_sml_triangle)
+ata(Paid_HH_big_triangle)
 
-```
+_PAID, 3rd Party, Small a large
+Paid_3D_big <- dt_PaidCase %>% filter(dataset_type=="PAID" , Business == "3rd Party" , ClaimSize=="Large") 
+Paid_3D_big_triangle <- Paid_3D_big %>% as.triangle(origin="ay", dev="dy", value="SumOfamount")
+Paid_3D_big_triangle
+plot(Paid_3D_big_triangle)
+plot(predict(chainladder(Paid_3D_big_triangle)))
+ata(Paid_3D_big_triangle)
+predict(chainladder(Paid_3D_big_triangle)) 
+Paid_3D_sml <- dt_PaidCase %>% filter(dataset_type=="PAID" , Business == "3rd Party" , ClaimSize=="Small") 
+Paid_3D_sml_triangle <- Paid_3D_sml %>% as.triangle(origin="ay", dev="dy", value="SumOfamount")
+Paid_3D_sml_triangle
+plot(Paid_3D_sml_triangle)
+plot(predict(chainladder(Paid_3D_sml_triangle)))
+ata(Paid_3D_sml_triangle)
+predict(chainladder(Paid_3D_sml_triangle))
+#small sa podla plotu ocividne vyvija dlhsie, pri large su obrovske prve koeficienty
+
+
+
+
 
 _If you are now comforatble with what this does, try doing the same, but using additional information: The Case data!_
 Hint: Sum Paid and Case together to come up with the final claims estimates (the Incurred claims)
 
-```{r}
+Paid_HH_sml_PC <- dt_PaidCase %>% filter(Business == "House" , ClaimSize=="Small") 
+Paid_HH_sml_PC_triangle <- Paid_HH_sml_PC %>% as.triangle(origin="ay", dev="dy", value="SumOfamount")
+Paid_HH_sml_PC_triangle
+plot(Paid_HH_sml_PC_triangle)
+plot(predict(chainladder(Paid_HH_sml_PC_triangle)))
+ata(Paid_HH_sml_PC_triangle)
+predict(chainladder(Paid_HH_sml_PC_triangle)) 
 
-```
+Paid_HH_big_PC <- dt_PaidCase %>% filter(Business == "House" , ClaimSize=="Large") 
+Paid_HH_big_PC_triangle <- Paid_HH_big_PC %>% as.triangle(origin="ay", dev="dy", value="SumOfamount")
+Paid_HH_big_PC_triangle
+plot(Paid_HH_big_PC_triangle)
+plot(predict(chainladder(Paid_HH_big_PC_triangle)))
+ata(Paid_HH_big_PC_triangle)
+predict(chainladder(Paid_HH_big_PC_triangle))
+#big vyzera nejak viac flat 
+
+Paid_3D_sml_PC <- dt_PaidCase %>% filter(Business == "3rd Party" , ClaimSize=="Small") 
+Paid_3D_sml_PC_triangle <- Paid_3D_sml_PC %>% as.triangle(origin="ay", dev="dy", value="SumOfamount")
+Paid_3D_sml_PC_triangle
+plot(Paid_3D_sml_PC_triangle)
+plot(predict(chainladder(Paid_3D_sml_PC_triangle)))
+ata(Paid_3D_sml_PC_triangle)
+predict(chainladder(Paid_3D_sml_PC_triangle)) 
+
+Paid_3D_big_PC <- dt_PaidCase %>% filter(Business == "3rd Party" , ClaimSize=="Large") 
+Paid_3D_big_PC_triangle <- Paid_3D_big_PC %>% as.triangle(origin="ay", dev="dy", value="SumOfamount")
+Paid_3D_big_PC_triangle
+plot(Paid_3D_big_PC_triangle)
+plot(predict(chainladder(Paid_3D_big_PC_triangle)))
+ata(Paid_3D_big_PC_triangle)
+predict(chainladder(Paid_3D_big_PC_triangle))
+#big a small vyzeraju velmi odlisne, small ma na zaciatku velky skok oproti bigu ten je pozvolnejsi 
 
 
 ### Short or Long tail
-In insurance this means how fast is the data fully developed. The age-to-age factors help you understand exactly this. What would the age-to-age factors look like to make the business short/long tail? Are the lines of business in the exercise above short or long tailed? Try to come up with the meant payment term (weighted average of the duration until the claim is paid)
+In insurance this means how fast is the data fully developed. The age-to-age factors help you understand exactly this. What would the age-to-age factors look like to make the business short/long tail? Are the lines of business in the exercise above short or long tailed? Try to come up with the meant payment term (weighted average of the duration until the claim is paid) 
+
+ANSWER: Long or short tail is connected with time it usually takes for losses in triangle to not change any massively any further - therefore short tail is settled fast and losses doesnt change massively any further. Long tail takes time to settle and losses tend to change throughout the time more massively
+P <- dt_PaidCase %>% filter(Business == "3rd Party") 
+Pt <- P %>% as.triangle(origin="ay", dev="dy", value="SumOfamount")
+plot(predict(chainladder(Pt)))
+H <- dt_PaidCase %>% filter(Business == "House") 
+Ht <- H %>% as.triangle(origin="ay", dev="dy", value="SumOfamount")
+plot(predict(chainladder(Ht)))
+3rd Party ma tazsi chvost ako House, logicky ocakavatelne pri House by mali byt skody ihned ocakavatelne a vyrovnane v pripade velkeho pruseru napriklad prijde statik a posudi ci je stavba v poriadku a nestane sa ze to padne niekomu na hlavu. Pri autach - nehoda, najprv nemocnica, potom riesenie s poistovnou, potom komplikacie, potom auto, nejaka operacia, praceneschopnost, davky...
+
 
 So hopefully by this time you know how the losses were calculated for you to use in previous class...
 
@@ -150,13 +218,20 @@ So hopefully by this time you know how the losses were calculated for you to use
 There are a couple of different types of business in the data from previous lesson. 
 What do you think, how long are the average delays in payments? Set up a table, that will 
 _show your assumptions and commit it to your git repository._
+ata(Pt)
+ata(Ht)
+Pt-cbind(rep(0,10),Pt[,1:9])
+Ht-cbind(rep(0,10),Ht[,1:9])
+#Bud som uplne lost, alebo toto by malo odkumulovat tabulku a potom by sme mohli tvrdit ze v priemere su vyplatene plnenia ked zacnu byt odkumulovane cleny v riadku zaporne
+ata(Pt)-ata(Ht)
 
 
 ### Discounting  losses
 It is very unlikely, that we incur the whole loss on the *very first day*. This allows the insurance company to *invest* the premium received and earn som interest on it. So one way of thinking about our previous example would be to think about *the future value of money* collected at the time of the claim. In reality we need to know the answers now, so *discounting the losses* is more practical then earning interest on expenses.
 
 Let's check the data now. Were your expectations above supported by the calculation?
-Add comments to your notes if needed...
+Add comments to your notes if needed... 
+Nerozumiem zadaniu ulohy a teda neviem co mam spravit, ano je to neocakavane aby sa vyplatilo poistne plnenie ihned prvy den, ano mohli by sme diskontovat vsetky platby na rovnaky cas napriklad vzdy na zaciatok roka vyvoja poistiek v danom roku. Dal by sa pouzit jednoduchy "skolsky" model kedy na prvy stlpec by sme aplikovali (1+i)^-1 na druhy (1+i)^-2 atd., pripadne vynosovu krivku aby nas model bol presnejsi ak samozrejme budeme ignorovat to ze budeme mat asi aj nejake poziadavky na likviditu danych aktiv do ktorych investujeme. Neviem vsak ake kalkulacie mam spravit. 
 
 
 #### Exercise 4
