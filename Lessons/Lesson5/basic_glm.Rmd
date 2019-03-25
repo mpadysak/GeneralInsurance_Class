@@ -44,4 +44,26 @@ model1 <- glm(data = dt_pol_w_claims %>% filter(Burning_Cost != 0, Burning_Cost 
 ```{r}
 summary(model1)
 ```
+```{r}
+model1 <- glm(data = dt_pol_w_claims %>% filter(Burning_Cost != 0, Burning_Cost < 100),
+              formula = Burning_Cost ~ Veh_type1,
+              family = Gamma())
+```
 
+```{r}
+summary(model1)
+```
+Ja som spokojny, strasne vela sa ukazalo byt signifikantnych (p-value >0.05) takze na zaklade typu auta by sme vedeli ciastocnu informaciu kolko ma klient platit poistne. Niektore sa ukazuju nesignifikantne: napriklad private car aj ked je tam vysoky estimate na coefficient - moja teoria je ze je to sposobene velkym poctom aut v tejto skupine a dalsie faktory by to diferencovali - napriklad skusenosti vodica, pocet predchadzajucich nehod... Myslim si vsak ze tie co su vyznamne by sa pouzit dali a ostatne by som zvolil nulove pretoze treba rozlisovat medzi jednotlivymi vodicmi. 
+
+``
+```{r}
+model1 <- glm(data = dt_pol_w_claims %>% filter(Burning_Cost != 0, Burning_Cost < 100),
+              formula = Burning_Cost ~ VEH_brand,
+              family = Gamma())
+```
+
+```{r}
+summary(model1)
+
+```
+Toto sa mi velmi paci, z toho celeho mnozstva je p-value pod 0,05 len u dvoch znaciek aut, chcelo by to viacej preskumat ktore su to znacky a kolko aut je v tej skupine, avsak podla mna sa ukazuje takato volba faktora ktory ovplyvnuje vysku poistneho velmi vhodna, logicka a lahko interpretovatelna. 
