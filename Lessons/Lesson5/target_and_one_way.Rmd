@@ -153,3 +153,39 @@ Two things happend here:
 
 #### Exercise
 Choose another feature and try to find out the story behind data, using similar approach as above.
+
+dt_pol_w_claims %>% 
+  ggplot(aes(y = Burning_Cost, x = Veh_type1)) + 
+  geom_jitter()
+  
+dt_pol_w_claims %>% 
+  group_by(Veh_type1) %>% 
+  summarise(BC_avg = mean(Burning_Cost, na.rm  = TRUE),
+            BC_median = median(Burning_Cost, na.rm = TRUE),
+            cnt = n()) %>% 
+  arrange(desc(BC_avg)) 
+  
+dt_pol_w_claims %>% 
+  ggplot(aes(y = Burning_Cost, x = Veh_type1)) + 
+  geom_boxplot() +
+  ylim(0, 100) 
+  
+  ###Typ auta vyzera byt pouzitelny, napr z grafu aj zo groupovania a summarize vyzeraju byt napriklad taxiky na tom dost zle :-) 
+  
+  dt_pol_w_claims %>% 
+  ggplot(aes(y = Burning_Cost, x = VEH_brand)) + 
+  geom_jitter()
+  
+dt_pol_w_claims %>% 
+  group_by(VEH_brand) %>% 
+  summarise(BC_avg = mean(Burning_Cost, na.rm  = TRUE),
+            BC_median = median(Burning_Cost, na.rm = TRUE),
+            cnt = n()) %>% 
+  arrange(desc(BC_avg)) 
+  
+dt_pol_w_claims %>% 
+  ggplot(aes(y = Burning_Cost, x = VEH_brand)) + 
+  geom_boxplot() +
+  ylim(0, 100) 
+  
+  ###Zjavne aj niektore znacky su na tom horsie, napriklad najhorsia podla BC_avg je 021 ale ma len jedno pozorovanie takze to treba brat s rezervou... avsak 7ma ma 1195 napr. alebo 2 ma 99 a tam uz sa nieco ukazuje a mohli by sme asi tvrdit ze niektore znacky maju blizsie k buracke
